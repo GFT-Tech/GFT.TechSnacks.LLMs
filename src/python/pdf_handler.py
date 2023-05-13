@@ -95,9 +95,19 @@ class pdf_handler:
                     }
                 result += [found_section]
         if previous_section is None:
+            if found_section is None:
+                #Absolutelly No Sections were found!
+                #We create a single session
+                found_section = { 
+                    'title': os.path.splitext(os.path.basename(self.pdf_file_path))[0], 
+                    'start_page':1                    
+                    }
+                result += [found_section]
             found_section['end_page']=len(self.pdf_reader.pages)
             self._private_extract_bookmark_text(found_section)
+               
         return result
+    
     
     def _private_extract_bookmark_text(self, bookmark):
         """
