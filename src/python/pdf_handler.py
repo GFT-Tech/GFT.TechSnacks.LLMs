@@ -224,13 +224,13 @@ class pdf_handler:
         # calculate embeddings
         # OpenAI you can submit up to 2048 embedding inputs per request
         # On Azure we can only 1! :-(
-        BATCH_SIZE = 1  
-
         embeddings = []
+        CT=1
         if openai.api_type=="azure":
-            CT=1
+            BATCH_SIZE = 1
         else:
-            CT=1000
+            BATCH_SIZE = 1000
+
         for batch_start in range(0, len(data), BATCH_SIZE):
             batch_end = batch_start + BATCH_SIZE
             batch = data[batch_start:batch_end]

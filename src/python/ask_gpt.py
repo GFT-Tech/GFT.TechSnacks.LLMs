@@ -16,7 +16,7 @@ pdf = pdf_handler(pdf_file_path='docs/sphinx_open_DesignersGuide.pdf',
 
 embeddings = pdf.get_embeddings()
 
-gpt = gpt_handler(system_role='Use the below information from the "Sphinx Designer`s Guide" to answer the subsequent question. If the answer cannot be found in the information, write "I could not find an answer, please contact GFT."',
+gpt = gpt_handler(system_role='Use the below information from the "Sphinx Designer`s Guide"(on triplle backticks) to answer the subsequent question. If the answer cannot be found in the information, write "I could not find an answer, please contact GFT."',
                   embeddings=embeddings,
                   gpt_model="gpt-play",
                   embedding_model="gpt-embedding-ada"

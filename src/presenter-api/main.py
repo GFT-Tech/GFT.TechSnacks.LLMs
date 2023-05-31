@@ -21,6 +21,21 @@ You are an friendly assistant that produces Reveal.Js Slides and follow ALL thes
 - Never generate an Agenda Slide 
 - Never generate an Title Slide 
 - Add --- to split slides 
+- On Every slide, add a line before the '# title' with '<!-- .element: data-background-image="IMAGE_HERE" -->'. Replace "IMAGE_HERE" with images from the List under "Images:" by replacing the "KEYWORD_HERE" with topics related with "Arts"
+Images: 
+- https://loremflickr.com/1600/960/KEYWORD_HERE
+"""
+
+PRESENTER_GFT_SYSTEM_ROLE ="""
+You are an friendly assistant that produces Reveal.Js Slides and follow ALL these guidelines:
+- ONLY and EXCLUSIVELY use Reveal.js's Markdown format, without ANY Extra text
+- Use Bullet Points and keywords, no more than 10 words per bullet
+- Use ONLY ## as title on each slide
+- Never use # or ### as title of each slide
+- Never generate an Introduction Slide
+- Never generate an Agenda Slide 
+- Never generate an Title Slide 
+- Add --- to split slides 
 - On Every slide, add a line before the '# title' with '<!-- .element: data-background-image="IMAGE_HERE" -->'. Replace "IMAGE_HERE" with images from the List under "Images:" 
 Images: 
 - https://www.gft.com/.imaging/focalpoint/1600x960/dam/jcr:6400a54c-0eae-44bf-a692-838d1ea49138/gft-group_financial-figures-2021_record-year_light.webp
@@ -55,26 +70,18 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.get('/presentation')
-def presentation():    
-
-    user_context = [
-        {"role":"system","content":PRESENTER_SYSTEM_ROLE},
-        {"role":"user","content":"5 Markdown(Reveal.JS) Slides explaining the top 5 main topics to explan how Embeddings works on LLMs"}]
-    response = openai.ChatCompletion.create(
-        engine="gpt-play",
-        messages=user_context,
-        temperature=0
-    )
-    response_json_string = response["choices"][0]["message"]["content"]
-    return Response(content=response_json_string, media_type="text/template")
     
 @app.post('/presentation-create')
 def process_message(payload: dict):    
     user_context = payload.get('messages', [])    
-    user_message_content = user_context[-1]["content"]    
-    user_context.insert(0, {"role": "system", "content": PRESENTER_SYSTEM_ROLE })
+    command=user_context[-1]
+    user_message_content = command["content"]
+    role_to_use=PRESENTER_GFT_SYSTEM_ROLE
+    if 'creative' in command:
+        role_to_use=PRESENTER_SYSTEM_ROLE
+        command.pop('creative') #Removing otherwise openai complains about this unknown property
+
+    user_context.insert(0, {"role": "system", "content": role_to_use })
     response = openai.ChatCompletion.create(
         engine="gpt-play",
         messages=user_context,
@@ -83,18 +90,3 @@ def process_message(payload: dict):
     response_json_string = response["choices"][0]["message"]["content"]
 
     return Response(content=response_json_string, media_type="text/template")
-
-@app.post('/ask')
-def process_message(payload: dict):    
-    user_context = payload.get('messages', [])    
-    user_message_content = user_context[-1]["content"]    
-    user_context.insert(0, {"role": "system", "content": PRESENTER_SYSTEM_ROLE })
-    response = openai.ChatCompletion.create(
-        engine="gpt-play",
-        messages=user_context,
-        temperature=0
-    )
-    response_json_string = response["choices"][0]["message"]["content"]
-
-    return Response(content=response_json_string, media_type="text/template")
-

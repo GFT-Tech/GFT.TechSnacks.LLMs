@@ -56,7 +56,7 @@ class gpt_handler:
         question = f"\n\nQuestion: {query}"
         message = introduction
         for string in strings:
-            next_article = f'\n\nInformation section:\n"""\n{string}\n"""'
+            next_article = f'\n\nInformation section:\n```\n{string}\n```'
             if (
                 self._private_count_tokens(message + next_article + question)
                 > token_budget
