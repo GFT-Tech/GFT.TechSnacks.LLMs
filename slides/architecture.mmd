@@ -1,0 +1,66 @@
+---
+title: Question answering using embeddings-based search
+---
+flowchart LR
+    %% declarations
+    USER(("fa:fa-user-circle User "))
+    PINECONE[(Pinecone)]
+    FILES>fa:fa-copy files]
+    READ[fa:fa-book-reader Read\nData]
+    SPLIT[fa:fa-stream Split\nChunks]
+    EMBEDDINGS[fa:fa-sort-numeric-down Create\nEmbeddings]
+    STORE[fa:fa-save Store\nEmbeddings]
+    EMBEDDINGS2[fa:fa-sort-numeric-down Embeddings\nQUESTION]
+    QUERY[fa:fa-search Similarity\nSearch]
+    QUESTION[fa:fa-question-circle User\nQuestion]
+    PROMPT[fa:fa-terminal Engineered\nPrompt]
+    AI-EMBEDDINGS[fa:fa-sort-numeric-down Embeddings\nService]
+    CHAT-COMPLETION[fa:fa-spinner Chat\nCompletion\nService]
+    RESPONSE[fa:fa-list Format \nResponse]
+    %%styles
+    classDef gray fill:#F5F5F5,stroke:#666666;
+    classDef blue fill:#DAE8FC,stroke:#6C8EBF;
+    classDef red fill:#F8CECC,stroke:#B85450;
+    classDef green fill:#D5E8D4,stroke:#82B366;
+
+    %% FLow
+    subgraph OPENAI[OpenAi]
+        AI-EMBEDDINGS
+        CHAT-COMPLETION
+    end
+    
+    subgraph VECTORDB[Vector Database]
+        PINECONE
+    end
+
+    subgraph PROCESS[Pre-Processing: Vectorize Documents]
+        FILES --> READ
+        READ --> SPLIT
+        SPLIT --> EMBEDDINGS
+        EMBEDDINGS <-->|"⓵ Create Embeddings"| AI-EMBEDDINGS
+        EMBEDDINGS -->|"⓶ Store Embeddings Vector"| STORE        
+    end
+    STORE --> PINECONE
+
+    subgraph CHATBOT[Your Chatbot]
+        RESPONSE
+        QUESTION --> EMBEDDINGS2
+        EMBEDDINGS2 <-->|"⓵ Create Question Embeddings"| AI-EMBEDDINGS
+        EMBEDDINGS2 -->|"⓶ Query"| QUERY
+        QUERY -->|"⓶ Build Prompt"| PROMPT
+        PROMPT <-->|"⓵ Prompt OpenAi"| CHAT-COMPLETION
+        PROMPT -->|"⓶ OpenAi Response"| RESPONSE
+    end
+
+    QUERY <-->|"⓵ Query"| PINECONE
+    USER --> QUESTION
+    RESPONSE-->USER
+    
+    %%styles
+    class OPENAI red;
+    class VECTORDB blue;
+    class PROCESS gray;
+    class OPENAI red;
+    class CHATBOT green;
+    
+
