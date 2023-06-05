@@ -1,6 +1,3 @@
----
-title: Question answering using embeddings-based search
----
 flowchart LR
     %% declarations
     USER(("fa:fa-user-circle User "))
@@ -18,49 +15,64 @@ flowchart LR
     CHAT-COMPLETION[fa:fa-spinner Chat\nCompletion\nService]
     RESPONSE[fa:fa-list Format \nResponse]
     %%styles
-    classDef gray fill:#F5F5F5,stroke:#666666;
+    classDef process fill:#FFF2CC,stroke:#D6B656,stroke-width:3px;
+    classDef purple fill:#E1D5E7,stroke:#9673A6;
     classDef blue fill:#DAE8FC,stroke:#6C8EBF;
     classDef red fill:#F8CECC,stroke:#B85450;
     classDef green fill:#D5E8D4,stroke:#82B366;
-
+    classDef overview fill:#F5F5F5,stroke:#666666,font-size:25px;
     %% FLow
-    subgraph OPENAI[OpenAi]
-        AI-EMBEDDINGS
-        CHAT-COMPLETION
+    subgraph OVERVIEW[Question answering using embeddings-based search]
+        USER --> QUESTION
+        RESPONSE-->USER
+        STORE --> PINECONE
+        QUERY <---->|"⓵ Query"| PINECONE
+        subgraph OPENAI[OpenAi - Cloud Service]
+            direction BT
+            AI-EMBEDDINGS
+            CHAT-COMPLETION
+        end
+        subgraph PROCESS[Pre-Processing: Vectorize Documents]
+            direction BT
+            FILES --> READ
+            READ --> SPLIT
+            SPLIT --> EMBEDDINGS
+            EMBEDDINGS <-->|"⓵ Create Embeddings"| AI-EMBEDDINGS
+            EMBEDDINGS -->|"⓶ Store Vector"| STORE
+        end
+        subgraph VECTORDB[Vector Database]
+            PINECONE
+        end
+        subgraph CHATBOT[Your Chatbot]
+            direction LR
+            QUESTION --> EMBEDDINGS2
+            EMBEDDINGS2 <------>|"⓵ Create Question Embeddings"| AI-EMBEDDINGS
+            EMBEDDINGS2 -->|"⓶ Query"| QUERY
+            QUERY -->|"⓶ Build Prompt"| PROMPT
+            PROMPT <-->|"⓵ Prompt OpenAi"| CHAT-COMPLETION
+            PROMPT -->|"⓶ OpenAi Response"| RESPONSE
+        end
     end
-    
-    subgraph VECTORDB[Vector Database]
-        PINECONE
-    end
-
-    subgraph PROCESS[Pre-Processing: Vectorize Documents]
-        FILES --> READ
-        READ --> SPLIT
-        SPLIT --> EMBEDDINGS
-        EMBEDDINGS <-->|"⓵ Create Embeddings"| AI-EMBEDDINGS
-        EMBEDDINGS -->|"⓶ Store Embeddings Vector"| STORE        
-    end
-    STORE --> PINECONE
-
-    subgraph CHATBOT[Your Chatbot]
-        RESPONSE
-        QUESTION --> EMBEDDINGS2
-        EMBEDDINGS2 <-->|"⓵ Create Question Embeddings"| AI-EMBEDDINGS
-        EMBEDDINGS2 -->|"⓶ Query"| QUERY
-        QUERY -->|"⓶ Build Prompt"| PROMPT
-        PROMPT <-->|"⓵ Prompt OpenAi"| CHAT-COMPLETION
-        PROMPT -->|"⓶ OpenAi Response"| RESPONSE
-    end
-
-    QUERY <-->|"⓵ Query"| PINECONE
-    USER --> QUESTION
-    RESPONSE-->USER
-    
     %%styles
     class OPENAI red;
     class VECTORDB blue;
-    class PROCESS gray;
+    class PROCESS purple;
     class OPENAI red;
     class CHATBOT green;
-    
+    class USER process;
+    class PINECONE process;
+    class FILES process;
+    class READ process;
+    class SPLIT process;
+    class EMBEDDINGS process;
+    class STORE process;
+    class EMBEDDINGS2 process;
+    class QUERY process;
+    class QUESTION process;
+    class PROMPT process;
+    class AI-EMBEDDINGS process;
+    class CHAT-COMPLETION process;
+    class RESPONSE process;
+    class OVERVIEW overview;
+
 
