@@ -31,7 +31,7 @@ curl --location 'http://localhost:8181/chat' \
 ```
 
 ## Frontend
-You need angular to run it. If you do not have angular, just go [here](https://angular.io/guide/setup-local). If you have no Angular, you might nmeed to install NodeJs as well... As Long as you follow the Angular Setup Guide you should be fine!
+You need angular to run it. If you do not have angular, just go [here](https://angular.io/guide/setup-local). If you have no Angular, you might need to install NodeJs as well... As Long as you follow the Angular Setup Guide you should be fine!
 
 ### Install dependencies
 Go to the /frontend/gft-bot folder and run:

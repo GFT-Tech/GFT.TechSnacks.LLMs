@@ -83,7 +83,7 @@ def process_message(payload: dict):
 
     user_context.insert(0, {"role": "system", "content": role_to_use })
     response = openai.ChatCompletion.create(
-        engine="gpt-play",
+        engine="gpt-tech-snacks",
         messages=user_context,
         temperature=0
     )
