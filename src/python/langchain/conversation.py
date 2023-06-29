@@ -34,6 +34,12 @@ embeddings = OpenAIEmbeddings(openai_api_key=os.environ['OPENAI_API_KEY'],
                               openai_api_type=os.environ['OPENAI_API_TYPE']
                               )#1 is azure limitation
 TEXT_FIELD = "text"
+
+pinecone.init(
+    api_key=os.environ['PINECONE_API_KEY'],
+    environment=os.environ['PINECONE_REGION']  # find next to API key in console
+)
+
 index = pinecone.Index(os.environ['PINECONE_INDEX'])
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
