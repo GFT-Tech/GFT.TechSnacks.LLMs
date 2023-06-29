@@ -2,8 +2,7 @@
 <ng-container *ngFor="let message of messages">
 <div class="message"
 [ngClass]="{ 'from': message.author === 'bot',
-'to': message.author === 'user' }">
-{{ message.content }}
+'to': message.author === 'user' }" [innerHTML]="message.content | nl2br">
 </div>
 </ng-container>
 <label *ngIf="messages.length == 0; else dialogInfo" for="nameField">Your message</label>

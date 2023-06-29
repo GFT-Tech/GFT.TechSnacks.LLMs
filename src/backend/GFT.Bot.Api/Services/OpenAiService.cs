@@ -14,7 +14,12 @@ public class OpenAiService
         _configuration = configuration;
 
     }
-
+    
+    string system_role=@"You are a GFT Tech Scnaks Bot. Follow there instructions:
+- Always salute the user and thank him to come to Tech Snacks
+- Finish and sentences with 'And Life is good!'
+- Whenever possible use Bullet Points to break your answer
+";
     public async Task<ChatChoice> Prompt(PromptDto dto)
     {
         OpenAIClient client = new OpenAIClient(
@@ -27,6 +32,7 @@ public class OpenAiService
             {
                 Messages =
                 {
+                    new ChatMessage(ChatRole.System, system_role ),
                     new ChatMessage(ChatRole.User, dto.Question)
                 },
                 Temperature = (float)0.7,

@@ -11,15 +11,15 @@ openai.api_version = "2023-03-15-preview"
 openai.api_key = os.getenv("OPENAI_AZURE_KEY") # Azure OpenAI Key
 
 # Create an instance of pdf handler
-#pdf = pdf_handler(pdf_file_path='docs/helicopter_flying_handbook.pdf',
-#                  embedding_model='embedding-tech-snacks')#this one needs to be the deployed modelo to azuze
+pdf = pdf_handler(pdf_file_path='docs/helicopter_flying_handbook.pdf',
+                  embedding_model='embedding-tech-snacks')#this one needs to be the deployed modelo to azuze
 
 #pdf = pdf_handler(pdf_file_path='docs/HELICOPTER_FLIGHT_TRAINING_MANUAL.pdf',
 #                  embedding_model='embedding-tech-snacks')#this one needs to be the deployed modelo to azuze
 
 # Create an instance of pdf handler
-pdf = pdf_handler(pdf_file_path='docs/sphinx_open_DesignersGuide.pdf',
-                  embedding_model='embedding-tech-snacks')#this one needs to be the deployed modelo to azuze
+#pdf = pdf_handler(pdf_file_path='docs/sphinx_open_DesignersGuide.pdf',
+#                  embedding_model='embedding-tech-snacks')#this one needs to be the deployed modelo to azuze
 
 embeddings = pdf.get_embeddings()
 

@@ -48,6 +48,7 @@ qa = RetrievalQA.from_chain_type(
     retriever=vectorstore.as_retriever(),
     memory=memory
 )
+qa.verbose=True
 while True:
     query = input("> ")
     response = qa.run(query)
