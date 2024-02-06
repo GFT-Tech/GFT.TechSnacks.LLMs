@@ -12,7 +12,7 @@ openai[embeddings]
 tiktoken==0.4.0
 langchain==0.0.187
 atlassian-python-api==3.38.0
-fastapi==0.95.2
+fastapi==0.109.1
 websockets==11.0.3
 uvicorn[standard]==0.22.0
 pinecone-client==2.2.1
